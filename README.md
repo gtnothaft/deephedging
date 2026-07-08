@@ -10,3 +10,4 @@ The different files are:
 - deep-hedging-vs-black-scholes: Comparing the Neural Network hedge with the classical Black-Scholes Delta hedge, with and without transaction costs. 
 - deep_hedging_markov folder: Using a 2-state Markov-switching volatility model to compare how simple and recurrent networks perform. Additionally, it includes an inclusion of a second hedging instrument to compare regime blind network versus a 2-instrument oracle.
 - Delta_Vega_Deep_Hedging folder: Using a Delta-Vega hedging strategy to improve upon a Delta-only hedging strategt in the presence of transaction costs. More details to be found in the folder.
+- 03_gbm_heston_bs_baseline_deep_hedging.ipynb: Compares classical delta hedging against neural-network hedging policies for an at-the-money European call under GBM and Heston market simulators.
