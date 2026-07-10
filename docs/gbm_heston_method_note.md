@@ -141,7 +141,7 @@ The final term liquidates the remaining stock position at maturity. The cost mod
 For terminal gain $G$, define lower-tail CVaR by
 
 ```math
-\operatorname{CVaR}_{\alpha}(G)
+\mathrm{CVaR}_{\alpha}(G)
 =
 \sup_w
 \left[
@@ -168,7 +168,7 @@ Thus,
 ```math
 \boxed{
 \mathcal L
-=-\operatorname{CVaR}_{50\%}(G)
+=-\mathrm{CVaR}_{50\%}(G)
 }.
 ```
 
@@ -181,7 +181,7 @@ The reported score is
 ```math
 \boxed{
 \mathrm{Score}
-=-\operatorname{CVaR}_{50\%}(G)
+=-\mathrm{CVaR}_{50\%}(G)
 }.
 ```
 
