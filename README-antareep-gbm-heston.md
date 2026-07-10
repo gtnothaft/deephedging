@@ -39,7 +39,7 @@ The Heston tables and figures compare exactly three strategies:
 
 The simulator's variance process `v_t` is latent and is not passed to the neural networks. Instead, the NNs use the causal EWMA estimate [RiskMetrics1996]
 
-$$
+```math
 \hat v_t
 =
 \lambda\hat v_{t-1}
@@ -47,7 +47,7 @@ $$
 (1-\lambda)
 \frac{\log^2(S_t/S_{t-1})}{\Delta t},
 \qquad \lambda=0.94.
-$$
+```
 
 The policy inputs are:
 
@@ -60,23 +60,23 @@ The analytical Heston delta still uses the true simulated `v_t`, which is why it
 
 The networks are trained by minimizing
 
-$$
+```math
 \boxed{
 \mathrm{Loss}
 =
 -\mathrm{CVaR}_{50\%}(G)
 }
-$$
+```
 
 where `G` is terminal net hedging gain after option payoff and transaction costs. The same quantity is the primary out-of-sample score:
 
-$$
+```math
 \boxed{
 \mathrm{Score}
 =
 -\mathrm{CVaR}_{50\%}(G)
 }
-$$
+```
 
 **Lower score is better.**
 
