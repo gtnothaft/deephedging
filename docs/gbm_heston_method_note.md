@@ -145,7 +145,7 @@ For terminal gain $G$, define lower-tail CVaR by
 =
 \sup_w
 \left[
- w
+w
 -
 \frac{1}{1-\alpha}
 \mathbb E[(w-G)^+]
