@@ -24,9 +24,9 @@ For the Heston neural networks, the NNs receive an EWMA variance estimate constr
 
 The networks are trained and scored using
 
-$$
+```math
 \mathrm{Score}=-\mathrm{CVaR}_{50\%}(G),
-$$
+```
 
 where $G$ is raw terminal net gain after transaction costs. Lower scores indicate better lower-tail hedging performance.
 

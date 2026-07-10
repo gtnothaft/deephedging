@@ -10,9 +10,9 @@ The neural policies are trained directly against a terminal risk objective, foll
 
 The claim is a short, at-the-money European call with payoff
 
-$$
+```math
 (S_T-K)^+.
-$$
+```
 
 The only hedge instrument is the underlying stock. The hedge is rebalanced on 22 discrete dates over a 30-day maturity.
 
@@ -22,14 +22,14 @@ The only hedge instrument is the underlying stock. The hedge is rebalanced on 22
 
 The GBM simulator uses
 
-$$
+```math
 S_{t+\Delta t}
 =
 S_t\exp\left[
 (\mu-\tfrac12\sigma^2)\Delta t
 +\sigma\sqrt{\Delta t}Z_t
 \right].
-$$
+```
 
 The analytical Black-Scholes call delta is the classical GBM benchmark [BlackScholes1973].
 
@@ -37,20 +37,20 @@ The analytical Black-Scholes call delta is the classical GBM benchmark [BlackSch
 
 The Heston simulator uses
 
-$$
+```math
 \frac{dS_t}{S_t}
 =
 \mu\,dt+\sqrt{v_t}\,dW_t^S,
-$$
+```
 
-$$
+```math
 dv_t
 =
 \kappa(\theta-v_t)dt
 +\xi\sqrt{v_t}\,dW_t^v,
 \qquad
 \mathrm{corr}(dW^S,dW^v)=\rho.
-$$
+```
 
 Paths are simulated by full-truncation Euler. The Heston dynamics and semi-analytical option representation follow Heston (1993) [Heston1993].
 
@@ -64,12 +64,12 @@ $$
 
 Holding the current variance fixed, the stock delta is
 
-$$
+```math
 \Delta^{\mathrm{Heston}}
 =
 \frac{\partial C}{\partial S}
 =P_1.
-$$
+```
 
 The code evaluates the Fourier integrals using Gauss-Laguerre quadrature. At each hedge date it uses the simulator's true latent variance $v_t$. Therefore, the analytical Heston delta is a **model-consistent oracle stock-delta benchmark** as opposed to a real implementable strategy.
 
@@ -79,11 +79,11 @@ Because only the stock is tradable, the Heston market remains incomplete: stock 
 
 The latent Heston variance is not directly quoted in the market and is not passed to the neural networks. The NNs instead receive a causal EWMA variance proxy based only on observed stock returns [RiskMetrics1996]:
 
-$$
+```math
 \hat v_0=\sigma_0^2,
-$$
+```
 
-$$
+```math
 \hat v_t
 =
 \lambda_{\mathrm{EWMA}}\hat v_{t-1}
@@ -92,18 +92,18 @@ $$
 \frac{\log^2(S_t/S_{t-1})}{\Delta t},
 \qquad
 \lambda_{\mathrm{EWMA}}=0.94.
-$$
+```
 
 The state features are:
 
 - Simple NN:
-  $$
+  ```math
   [\log(S_t/K),\;\tau_t/T,\;\sqrt{\hat v_t}/\sigma_0].
-  $$
+  ```
 - Recurrent NN:
-  $$
+  ```math
   [\log(S_t/K),\;\tau_t/T,\;\sqrt{\hat v_t}/\sigma_0,\;\delta_{t-1}].
-  $$
+  ```
 
 The previous hedge is included because trading costs depend on the trade size $|\delta_t-\delta_{t-1}|$, so current holdings are relevant to the next action [Buehler2019].
 
@@ -111,7 +111,7 @@ The previous hedge is included because trading costs depend on the trade size $|
 
 For a short call, terminal net gain is
 
-$$
+```math
 G
 =
 V_0-(S_T-K)^+
@@ -120,11 +120,11 @@ V_0-(S_T-K)^+
 \delta_t(S_{t+1}-S_t)
 -
 C_T,
-$$
+```
 
 with
 
-$$
+```math
 C_T
 =
 \gamma
@@ -132,7 +132,7 @@ C_T
 S_t|\delta_t-\delta_{t-1}|
 +
 \gamma S_T|\delta_{N-1}|.
-$$
+```
 
 The final term liquidates the remaining stock position at maturity. The cost model is a stock-only proportional specialization of the generic convex trading-cost framework in deep hedging [Buehler2019].
 
@@ -140,37 +140,37 @@ The final term liquidates the remaining stock position at maturity. The cost mod
 
 For terminal gain $G$, define lower-tail CVaR by
 
-$$
-\operatorname{CVaR}_{\alpha}(G)
+```math
+\mathrm{CVaR}_{\alpha}(G)
 =
 \sup_w
 \left[
- w
+w
 -
 \frac{1}{1-\alpha}
 \mathbb E[(w-G)^+]
 \right].
-$$
+```
 
 The project uses $\alpha=0.50$. The neural network and auxiliary threshold $w$ are trained jointly by minimizing
 
-$$
+```math
 \mathcal L(\theta,w)
 =
 -w
 +
 \frac{1}{1-\alpha}
 \mathbb E[(w-G_\theta)^+].
-$$
+```
 
 Thus,
 
-$$
+```math
 \boxed{
 \mathcal L
-=-\operatorname{CVaR}_{50\%}(G)
+=-\mathrm{CVaR}_{50\%}(G)
 }.
-$$
+```
 
 Optimization uses Adam [KingmaBa2015].
 
@@ -178,12 +178,12 @@ Optimization uses Adam [KingmaBa2015].
 
 The reported score is
 
-$$
+```math
 \boxed{
 \mathrm{Score}
-=-\operatorname{CVaR}_{50\%}(G)
+=-\mathrm{CVaR}_{50\%}(G)
 }.
-$$
+```
 
 At the 50% level, empirical CVaR is the mean of the lowest half of out-of-sample terminal gains. Since gain is better when larger, negating CVaR gives a loss-like metric:
 
@@ -195,9 +195,9 @@ Scores are calculated from raw terminal net gains. No mean-centering or visual t
 
 The final Heston experiment uses
 
-$$
+```math
 \gamma\in\{0,0.001,0.005\}.
-$$
+```
 
 The Simple and Recurrent networks are trained separately at every $\gamma$, because the optimal balance between risk reduction and turnover changes with transaction costs.
 
@@ -232,8 +232,6 @@ Results are conditional on:
 - the EWMA state proxy,
 - the neural architecture and training budget,
 - the fixed random seed and held-out test sample.
-
-The study should therefore report comparative evidence within this controlled experiment, not universal superiority of one strategy.
 
 ## References
 

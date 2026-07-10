@@ -1,0 +1,26 @@
+# Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Pytest cache
+.pytest_cache/
+
+# macOS metadata
+.DS_Store
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Ignore trained model weights.
+outputs/models/*.pt
+
+# Keep final tables and figures tracked for the project deliverable.
+!outputs/tables/*.csv
+!outputs/figures/*.png
+!outputs/figures/*.pdf
